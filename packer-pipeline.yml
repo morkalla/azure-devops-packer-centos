@@ -1,0 +1,27 @@
+resources:
+- repo: self
+
+jobs:
+
+- job: Job_1
+  displayName: Setup
+  condition: succeeded()
+  pool:
+    name: Hosted Ubuntu 1604
+
+  steps:
+  - task: PackerBuild@1
+    inputs:
+      templateType: 'builtin'
+      connectedServiceName: '$(service-connection-name)'
+      isManagedImage: true 
+      managedImageName: '$(output-image-name)'
+      location: 'westeurope'
+      storageAccountName: '$(storage-account-name)'
+      azureResourceGroup: '$(resource-group-name)'
+      baseImageSource: 'default'
+      baseImage: 'OpenLogic:CentOS:7.7:linux' 
+      customImageOSType: 'linux'
+      deployScriptPath: 'vm-setup.sh'
+      #deployScriptArguments: 
+      additionalBuilderParameters: '{"vm_size":"Standard_B1ls"}'
